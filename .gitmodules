@@ -1,0 +1,3 @@
+[submodule "Submodules/JUCE"]
+	path = Submodules/JUCE
+	url = https://venkatKrishnan86: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@github.com/juce-framework/JUCE.git
