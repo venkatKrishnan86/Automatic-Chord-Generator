@@ -25,22 +25,33 @@ std::string predictChord(at::Tensor output, std::unordered_map<std::string, std:
 }
 
 // Function to calculate the chroma spectrum
-torch::Tensor calculate_chroma_spectrum(const torch::Tensor& fft_output, float sample_rate) {
+torch::Tensor calculate_chroma_spectrum(const torch::Tensor& fftOutput, float sampleRate) {
     // Assume fft_output is a 1D tensor with the magnitudes of the FFT
     int n_bins = 12;
     auto chroma = torch::zeros({n_bins});
 
     // Calculate the frequencies corresponding to each bin in the FFT output
-    long long fft_size = fft_output.size(0);
-    float freq_bin = sample_rate / fft_size;
+    long long fftSize = fftOutput.size(0);
+    float freqBin = sampleRate / fftSize;
 
-    for (int i = 0; i < fft_size / 2; ++i) { // Only need up to Nyquist frequency
-        float frequency = i * freq_bin;
-        int pitch_class = frequency_to_pitch_class(frequency);
-        if (pitch_class >= 0) {
-            chroma[pitch_class] += fft_output[i];
+    for (int i = 0; i < fftSize / 2; ++i) { // Only need up to Nyquist frequency
+        float frequency = i * freqBin;
+        int pitchClass = frequency_to_pitch_class(frequency);
+        if (pitchClass >= 0) {
+            chroma[pitchClass] += fftOutput[i];
         }
     }
 
     return chroma;
+}
+
+std::vector<int> returnMidiNotesOfChord(std::string midiNoteName, std::unordered_map<std::string, std::vector<int>> chordTemplate) {
+    std::vector<int> chord = chordTemplate[midiNoteName];
+    std::vector<int> midiNotes;
+    for(unsigned long i=0; i<12; i++){
+        if(chord[i]==1) {
+            midiNotes.push_back(static_cast<int>(i)+60);
+        }
+    }
+    return midiNotes;
 }

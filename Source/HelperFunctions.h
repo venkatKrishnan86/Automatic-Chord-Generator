@@ -59,3 +59,4 @@ const std::unordered_map<std::string, std::vector<int>> CHORD_TEMPLATE = {
 int frequency_to_pitch_class(float);
 std::string predictChord(at::Tensor, std::unordered_map<std::string, std::vector<int>>);
 torch::Tensor calculate_chroma_spectrum(const torch::Tensor& fft_output, float sample_rate);
+std::vector<int> returnMidiNotesOfChord(std::string midiNoteName, std::unordered_map<std::string, std::vector<int>> chordTemplate);
